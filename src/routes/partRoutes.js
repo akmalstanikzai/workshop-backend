@@ -1,0 +1,10 @@
+const express = require('express');
+const { parts } = require('../controllers/inventoryController');
+const { requireAuth, requireRole } = require('../middleware/auth');
+const router = express.Router();
+router.use(requireAuth);
+router.get('/', parts.list); router.get('/:id', parts.get);
+router.post('/', requireRole('admin', 'data_entry'), parts.create);
+router.patch('/:id', requireRole('admin', 'data_entry'), parts.update);
+router.delete('/:id', requireRole('admin'), parts.remove);
+module.exports = router;

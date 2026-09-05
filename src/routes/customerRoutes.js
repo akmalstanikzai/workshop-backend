@@ -1,0 +1,13 @@
+const express = require('express');
+const controller = require('../controllers/customerController');
+const { requireAuth, requireRole } = require('../middleware/auth');
+const router = express.Router();
+router.use(requireAuth);
+router.get('/', controller.list);
+router.get('/:id', controller.get);
+router.post('/', requireRole('admin', 'data_entry'), controller.create);
+router.patch('/:id', requireRole('admin', 'data_entry', 'telecom_engineer', 'power_engineer'), controller.update);
+router.delete('/:id', requireRole('admin'), controller.remove);
+router.post('/:id/items', requireRole('admin', 'data_entry'), controller.addItem);
+router.post('/:id/parts', requireRole('admin', 'data_entry', 'telecom_engineer', 'power_engineer'), controller.addPart);
+module.exports = router;

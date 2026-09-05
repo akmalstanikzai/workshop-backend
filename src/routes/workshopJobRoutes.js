@@ -1,0 +1,10 @@
+const express = require('express');
+const controller = require('../controllers/workshopJobController');
+const { requireAuth, requireRole } = require('../middleware/auth');
+const router = express.Router();
+router.use(requireAuth);
+router.get('/', controller.list); router.get('/:id', controller.get);
+router.post('/', requireRole('admin', 'data_entry'), controller.create);
+router.patch('/:id', requireRole('admin', 'data_entry', 'cashier', 'telecom_engineer', 'power_engineer'), controller.update);
+router.delete('/:id', requireRole('admin'), controller.remove);
+module.exports = router;

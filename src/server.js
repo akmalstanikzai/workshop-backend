@@ -15,6 +15,22 @@ const workshopJobRoutes = require('./routes/workshopJobRoutes');
 const app = express();
 const port = Number(process.env.PORT || 5000);
 
+// Register before CORS so preflight requests are logged too.
+app.use((request, response, next) => {
+  const started = process.hrtime.bigint();
+  let logged = false;
+  const logRequest = () => {
+    if (logged) return;
+    logged = true;
+    const duration = Number(process.hrtime.bigint() - started) / 1e6;
+    const status = response.writableFinished ? response.statusCode : 'ABORTED';
+    console.log(`${new Date().toISOString()} ${request.method} ${request.path} ${status} ${duration.toFixed(1)} ms`);
+  };
+  response.once('finish', logRequest);
+  response.once('close', logRequest);
+  next();
+});
+
 app.use(cors());
 app.use(express.json());
 

@@ -7,6 +7,9 @@ RUN npm ci
 
 COPY . .
 
+ENV NODE_ENV=production
+USER node
+
 EXPOSE 5000
 
-CMD ["npm", "start"]
+CMD ["node", "src/server.js"]

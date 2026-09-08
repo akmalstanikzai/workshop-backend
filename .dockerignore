@@ -3,3 +3,7 @@ node_modules
 .env.*
 .git
 npm-debug.log*
+backup
+.github
+deploy
+README.md
